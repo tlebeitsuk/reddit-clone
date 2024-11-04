@@ -38,14 +38,18 @@ async function renderList() {
 
 renderList()
 
-function upVote(number) {
-  const votes = document.querySelector("#votes-" + number)
-  votes.innerText = Number(votes.innerText) + 1
+async function upVote(postId) {
+  await fetch(`http://localhost:3000/posts/${postId}/upvote`, {
+    method: "PATCH"
+  })
+  renderList()
 }
 
-function downVote(number) {
-  const votes = document.querySelector("#votes-" + number)
-  votes.innerText = Number(votes.innerText) - 1
+async function downVote(postId) {
+  await fetch(`http://localhost:3000/posts/${postId}/downvote`, {
+    method: "PATCH"
+  })
+  renderList()
 }
 
 function newPost() {
