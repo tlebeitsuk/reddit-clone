@@ -1,31 +1,9 @@
-const data = [
-  {
-    id: 1,
-    title: "Feber: din dagliga källa till allt om teknik, bilar, prylar, spel, vetenskap och populärkultur",
-    url: "https://feber.se",
-    votes: 24,
-  },
-  {
-    id: 2,
-    title: "The Modern JavaScript Tutorial",
-    url: "https://javascript.info",
-    votes: 612,
-  },
-  {
-    id: 3,
-    title: "Daily.dev - Where developers suffer together",
-    url: "https://daily.dev",
-    votes: -8,
-  },
-  {
-    id: 4,
-    title: "Hacker News",
-    url: "https://news.ycombinator.com",
-    votes: 59,
-  },
-]
+async function renderList() {
+  // Get data from backend
+  const response = await fetch("http://127.0.0.1:3000/posts")
+  const data = await response.json()
 
-function renderList() {
+  // Get list container element
   const listContainer = document.querySelector("ul")
 
   // Delete items before render
