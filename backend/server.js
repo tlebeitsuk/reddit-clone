@@ -2,9 +2,14 @@ const express = require('express')
 const app = express()
 const port = 3000
 
+// Middleware for CORS
 const cors = require('cors')
 app.use(cors())
 
+// Middleware to parse JSON bodies
+app.use(express.json())
+
+// Data array (in-memory "database"), could be replaced by an real database like sqlite or postgresql/mysql
 const data = [
   {
     id: 1,
@@ -32,7 +37,6 @@ const data = [
   },
 ]
 
-
 app.get('/', (req, res) => {
   res.json("hello world")
 })
@@ -59,6 +63,26 @@ app.patch('/posts/:id/downvote', (req, res) => {
   const post = data.find(post => post.id === postId)
   // Update post votes
   post.votes -= 1
+  // Send back an empty response
+  res.json()
+})
+
+app.post('/posts', (req, res) => {
+  // Get title and url from request body
+  const { title, url } = req.body
+  // Check if title or url is empty
+  if (!title || !url) {
+    return res.status(400).json({ error: "Title and URL is required" })
+  }
+  // Create next postId
+  const postId = data.length + 1
+  // Add to TOP of data-array
+  data.unshift({
+    id: postId,
+    title,
+    url,
+    votes: 0,
+  })
   // Send back an empty response
   res.json()
 })

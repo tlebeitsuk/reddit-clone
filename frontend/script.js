@@ -9,8 +9,9 @@ async function renderList() {
   // Delete items before render
   listContainer.innerHTML = ""
 
-  data.forEach(post => {
-    const listItem = document.createElement('li')
+  // Create list items
+  data.forEach((post) => {
+    const listItem = document.createElement("li")
     listItem.className = "list-group-item"
 
     listItem.innerHTML = `
@@ -39,34 +40,46 @@ async function renderList() {
 renderList()
 
 async function upVote(postId) {
+  // Send PATCH request to backend to upvote post
   await fetch(`http://localhost:3000/posts/${postId}/upvote`, {
-    method: "PATCH"
+    method: "PATCH",
   })
+
+  // Re-render list
   renderList()
 }
 
 async function downVote(postId) {
+  // Send PATCH request to backend to downvote post
   await fetch(`http://localhost:3000/posts/${postId}/downvote`, {
-    method: "PATCH"
+    method: "PATCH",
   })
+
+  // Re-render list
   renderList()
 }
 
-function newPost() {
+async function newPost() {
+  // Get input values
   const title = document.querySelector("#post-title")
   const url = document.querySelector("#post-url")
 
-  // Add post to data array
-  data.push({
-    id: data.length + 1,
-    title: title.value,
-    url: url.value,
-    votes: 0,
+  // Send POST request to backend to create new post
+  await fetch("http://localhost:3000/posts", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      title: title.value,
+      url: url.value,
+    })
   })
 
   // Reset inputs
   title.value = ""
   url.value = ""
 
+  // Re-render list
   renderList()
 }
